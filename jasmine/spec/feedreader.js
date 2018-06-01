@@ -32,15 +32,31 @@ $(function() {
          * and that the URL is not empty.
          */
 
+        it('has URL defined', function() {
+            allFeeds.forEach(function(allFeeds) {
+                expect(allFeeds.url).toBeDefined();
+                expect(allFeeds.url.length).not.toBe(0);
+            });
+        });
+
 
         /* TODO: Write a test that loops through each feed
          * in the allFeeds object and ensures it has a name defined
          * and that the name is not empty.
          */
+
+        it('has a name defined', function() {
+            allFeeds.forEach(function(allFeeds) {
+                expect(allFeeds.name).toBeDefined();
+                expect(allFeeds.name.length).not.toBe(0);
+            });
+        });
     });
 
 
     /* TODO: Write a new test suite named "The menu" */
+
+    describe('The menu', function() {
 
         /* TODO: Write a test that ensures the menu element is
          * hidden by default. You'll have to analyze the HTML and
@@ -48,13 +64,45 @@ $(function() {
          * hiding/showing of the menu element.
          */
 
+        it('menu is hidden by default', function() {
+            expect(document.body.className).toContain('menu-hidden');
+        });
+
          /* TODO: Write a test that ensures the menu changes
           * visibility when the menu icon is clicked. This test
           * should have two expectations: does the menu display when
           * clicked and does it hide when clicked again.
           */
 
+        it('menu is shown after click', function() {
+            $('a.menu-icon-link').click();
+            expect(document.body.className).not.toContain('menu-hidden');
+        });
+
+        it('menu hides after second click', function() {
+            $('a.menu-icon-link').click();
+            expect(document.body.className).toContain('menu-hidden');
+        });
+
+    });
+
     /* TODO: Write a new test suite named "Initial Entries" */
+
+    describe('Initial Entries', function() {
+        var entry;
+
+        beforeEach(function(done) {
+            loadFeed(0, function() {
+                done();
+            });
+        });
+
+        it('entry element is present', function(done) {
+            entry = $('.feed').contents().find('.entry').size();
+            expect(entry).not.toBe(0);
+            done();
+        });
+    });
 
         /* TODO: Write a test that ensures when the loadFeed
          * function is called and completes its work, there is at least
@@ -64,6 +112,24 @@ $(function() {
          */
 
     /* TODO: Write a new test suite named "New Feed Selection" */
+
+    describe('New Feed Selection', function() {
+        var content;
+
+        beforeEach(function(done) {
+            loadFeed(1, function() {
+                content = $('.feed').html();
+                done();
+            });
+        });
+
+        it('new feed is loaded', function(done) {
+            loadFeed(0, function() {
+                expect($('.feed').html()).not.toEqual(content);
+                done();
+            });
+        });
+    });
 
         /* TODO: Write a test that ensures when a new feed is loaded
          * by the loadFeed function that the content actually changes.
