@@ -65,7 +65,7 @@ $(function() {
          */
 
         it('menu is hidden by default', function() {
-            expect(document.body.className).toContain('menu-hidden');
+            expect($('body').hasClass('menu-hidden')).toBeTruthy();
         });
 
          /* TODO: Write a test that ensures the menu changes
@@ -75,21 +75,16 @@ $(function() {
           */
 
         it('menu is shown after click', function() {
-            $('a.menu-icon-link').click();
-            expect(document.body.className).not.toContain('menu-hidden');
+            $('.menu-icon-link').trigger('click');
+            expect($('body').hasClass('menu-hidden')).toBeFalsy();
+            $('.menu-icon-link').trigger('click');
+            expect($('body').hasClass('menu-hidden')).toBeTruthy();
         });
-
-        it('menu hides after second click', function() {
-            $('a.menu-icon-link').click();
-            expect(document.body.className).toContain('menu-hidden');
-        });
-
     });
 
     /* TODO: Write a new test suite named "Initial Entries" */
 
     describe('Initial Entries', function() {
-        var entry;
 
         beforeEach(function(done) {
             loadFeed(0, function() {
@@ -98,8 +93,7 @@ $(function() {
         });
 
         it('entry element is present', function(done) {
-            entry = $('.feed').contents().find('.entry').size();
-            expect(entry).not.toBe(0);
+            expect($('.feed .entry').length).toBeGreaterThan(0);
             done();
         });
     });
@@ -114,21 +108,18 @@ $(function() {
     /* TODO: Write a new test suite named "New Feed Selection" */
 
     describe('New Feed Selection', function() {
-        var content;
-
-        beforeEach(function(done) {
-            loadFeed(1, function() {
-                content = $('.feed').html();
-                done();
-            });
-        });
-
-        it('new feed is loaded', function(done) {
+        let originalHtml = '';
+        beforeEach(function (done) {
             loadFeed(0, function() {
-                expect($('.feed').html()).not.toEqual(content);
-                done();
+                originalHtml = $('.feed').html();
+                loadFeed(1, done);
             });
         });
+
+        it('Changes content', function (done) {
+            expect($('.feed').html()).not.toBe(originalHtml);
+            done();
+        })
     });
 
         /* TODO: Write a test that ensures when a new feed is loaded
