@@ -116,7 +116,7 @@ $(function() {
             });
         });
 
-        it('Changes content', function (done) {
+        it('changes content', function (done) {
             expect($('.feed').html()).not.toBe(originalHtml);
             done();
         })
